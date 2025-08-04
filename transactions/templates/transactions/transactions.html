@@ -1,0 +1,37 @@
+<h1>Transactions!</h1>
+
+<h2>{{Transactions}}</h2>
+
+
+<a href ="{% url 'create_transaction'%}">Create Transaction</a>
+
+<table border="1">
+        <thead>
+            <tr>
+                <!-- <th>Name</th> -->
+                <th>Type</th>
+                <th>Created_at</th>
+                <th>transaction_timestamp</th>
+                <th>Amount</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in transactions %}
+                <tr>
+                    <!-- <td>{{ obj.user }}</td> -->
+                    <td>{{ obj.transaction_type }}</td>
+                    <td>{{ obj.created_at}}</td>
+                    <td>{{ obj.transaction_timestamp }}</td>
+                    <td>{{ obj.amount }}</td>
+                    <td>{{ obj.category }}</td>
+                    <td>
+                    <a href="{% url 'delete_transaction' obj.id %}">Delete</a>
+                    </td>
+                </tr>
+                
+            {% empty %}
+                <tr><td colspan="2">No objects found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>

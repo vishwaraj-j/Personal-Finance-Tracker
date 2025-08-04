@@ -1,5 +1,8 @@
 <h1>HOME!</h1>
 <h2>Welcome, {{ user.username }}!</h2>
+
+
+
 <form action="{% url 'logout' %}" method="post">
     {% csrf_token %} 
     <button type="submit">Logout</button>

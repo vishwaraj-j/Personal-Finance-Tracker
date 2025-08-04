@@ -3,6 +3,7 @@ from datetime import datetime
 from django.core.validators import MinValueValidator
 from django.contrib.auth .models import User
 
+
 class Categories(models.Model):
     name = models.CharField(max_length=150)
 
@@ -12,11 +13,11 @@ class Categories(models.Model):
 
 class Transactions(models.Model):
     class TransactionType(models.TextChoices):
-        INCOMNIG = "I", "Incoming"
-        OUTGOING = "O", "Outgoing"
+        INCOMNIG = "Incoming", "Incoming"
+        OUTGOING = "Outgoing", "Outgoing"
 
     transaction_type = models.CharField(
-        max_length = 2,
+        max_length = 8,
         choices = TransactionType
     )
 
@@ -43,6 +44,10 @@ class Balance(models.Model):
     decimal_places = 2,
     default = 0.00
     )
+
+    def __str__(self):
+        return f'{self.user} {self.amount}'
+
 
 class Budget(models.Model):
 
