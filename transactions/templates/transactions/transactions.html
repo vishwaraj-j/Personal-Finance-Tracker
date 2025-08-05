@@ -8,7 +8,6 @@
 <table border="1">
         <thead>
             <tr>
-                <!-- <th>Name</th> -->
                 <th>Type</th>
                 <th>Created_at</th>
                 <th>transaction_timestamp</th>
@@ -17,9 +16,8 @@
             </tr>
         </thead>
         <tbody>
-            {% for obj in transactions %}
+            {% for obj in page_obj %}
                 <tr>
-                    <!-- <td>{{ obj.user }}</td> -->
                     <td>{{ obj.transaction_type }}</td>
                     <td>{{ obj.created_at}}</td>
                     <td>{{ obj.transaction_timestamp }}</td>
@@ -38,3 +36,27 @@
             {% endfor %}
         </tbody>
     </table>
+
+<!-- {% for transaction in page_obj %}
+    {# Each "contact" is a Contact model object. #}
+    {{ transaction.amount }}<br>
+    ...
+{% endfor %} -->
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>

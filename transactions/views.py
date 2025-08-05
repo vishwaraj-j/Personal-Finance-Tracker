@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Transactions, Balance
 from .forms import TransactionsForm
+from django.core.paginator import Paginator
 
 
 @login_required
@@ -12,11 +13,21 @@ def show_transactions(request):
     userid = user.id
 
     transactions = Transactions.objects.filter(user = userid)
+    paginator = Paginator(transactions, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     # print("transactions:",transactions)
 
+    # context = {
+    #     'transactions': transactions
+    # }
+
     context = {
-        'transactions': transactions
+       "page_obj": page_obj 
     }
+
+
     return render(request, 'transactions/transactions.html', context)
 
 @login_required
