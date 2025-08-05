@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Transactions
+from .models import Transactions, Balance
 from .forms import TransactionsForm
 
 
@@ -24,7 +24,9 @@ def deleteTransaction(request, pk):
 
     transactions = Transactions.objects.get(id=pk)
     if request.method == "POST":
+           
         transactions.delete()
+
         return redirect('/transactions/')
 
     context = {
@@ -44,7 +46,32 @@ def createTransaction(request):
             print("Form is Valid")
             transactions = form.save(commit=False)
             transactions.user = request.user
+            print("transactions:", transactions)
             form.save()
+
+            user = request.user
+            userid = user.id
+            balance_to_update = Balance.objects.get_or_create(
+                user = userid,
+                defaults = {'balance': 0}
+            )
+            # print("balance:",balance_to_update[0].amount)
+            # print("balance_type",type(balance_to_update))
+
+            if transactions.transaction_type == 'Incoming':
+                balance_to_update_value = balance_to_update[0].amount + transactions.amount
+                print ("updated balance:",balance_to_update_value)
+                print("type: ", type(balance_to_update_value))
+                balance_to_update[0].amount = balance_to_update_value
+                balance_to_update[0].save()
+
+            if transactions.transaction_type == 'Outgoing':
+                balance_to_update_value = balance_to_update[0].amount - transactions.amount
+                print ("updated balance:",balance_to_update_value)
+                print("type: ", type(balance_to_update_value))
+                balance_to_update[0].amount = balance_to_update_value
+                balance_to_update[0].save()
+
             return redirect('show-transactions')
         else:
             print("Form errors", form.errors)
@@ -61,6 +88,8 @@ def updateTransaction(request, pk):
 
 
     transactions = Transactions.objects.get(id=pk)
+    old_transactions = transactions.amount
+    print("old_transaction: ",old_transactions)
     # form = TransactionsForm(instance=transactions)
 
     if request.method == 'POST':
@@ -71,6 +100,32 @@ def updateTransaction(request, pk):
             transactions = form.save(commit=False)
             transactions.user = request.user
             form.save()
+
+
+            user = request.user
+            userid = user.id
+            balance_to_update = Balance.objects.get_or_create(
+                user = userid,
+                defaults = {'balance': 0}
+            )
+            # print("balance:",balance_to_update[0].amount)
+            # print("balance_type",type(balance_to_update))
+
+            if transactions.transaction_type == 'Incoming':
+                balance_to_update_value = (balance_to_update[0].amount - old_transactions) + transactions.amount 
+                print("old_transaction: ",old_transactions)
+                print ("updated balance:",balance_to_update_value)
+                print("type: ", type(balance_to_update_value))
+                balance_to_update[0].amount = balance_to_update_value
+                balance_to_update[0].save()
+
+            if transactions.transaction_type == 'Outgoing':
+                balance_to_update_value = (balance_to_update[0].amount + old_transactions) - transactions.amount
+                print ("updated balance:",balance_to_update_value)
+                print("type: ", type(balance_to_update_value))
+                balance_to_update[0].amount = balance_to_update_value
+                balance_to_update[0].save()
+
             return redirect('show-transactions')
         else:
             print("Form errors", form.errors)

@@ -1,6 +1,37 @@
 <h1>HOME!</h1>
 <h2>Welcome, {{ user.username }}!</h2>
+<h3>Total Income: {{ total_income.amount__sum }}</h3>
+<h3>Total Expense: {{ total_expenses.amount__sum }}</h3>
+<h3>Balance: {{ balance }}</h3>
 
+
+<table border="1">
+        <thead>
+            <tr>
+                <!-- <th>Name</th> -->
+                <th>Type</th>
+                <th>Created_at</th>
+                <th>transaction_timestamp</th>
+                <th>Amount</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in recent_transactions %}
+                <tr>
+                    <!-- <td>{{ obj.user }}</td> -->
+                    <td>{{ obj.transaction_type }}</td>
+                    <td>{{ obj.created_at}}</td>
+                    <td>{{ obj.transaction_timestamp }}</td>
+                    <td>{{ obj.amount }}</td>
+                    <td>{{ obj.category }}</td>
+                </tr>
+                
+            {% empty %}
+                <tr><td colspan="2">No objects found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 
 <form action="{% url 'logout' %}" method="post">
