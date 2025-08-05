@@ -35,6 +35,9 @@ class Transactions(models.Model):
 
     category = models.ForeignKey(Categories, on_delete = models.SET_NULL, null = True)
 
+    def __str__(self):
+        return f"{self.user} {self.transaction_type} {self.transaction_timestamp} {self.amount} {self. category}"
+
 class Balance(models.Model):
 
     user = models.OneToOneField(User, on_delete = models.CASCADE)

@@ -12,7 +12,7 @@ def show_transactions(request):
     userid = user.id
 
     transactions = Transactions.objects.filter(user = userid)
-    print("transactions:",transactions)
+    # print("transactions:",transactions)
 
     context = {
         'transactions': transactions
@@ -34,16 +34,49 @@ def deleteTransaction(request, pk):
     return render(request, 'transactions/delete.html', context)
 
 
+@login_required
 def createTransaction(request):
-
-    form = TransactionsForm()
+ 
     if request.method == 'POST':
-        print("POST:", request.POST)
+        # print("POST:", request.POST)
         form = TransactionsForm(request.POST)
         if form.is_valid():
+            print("Form is Valid")
+            transactions = form.save(commit=False)
+            transactions.user = request.user
             form.save()
-            return redirect('/transactions')
+            return redirect('show-transactions')
+        else:
+            print("Form errors", form.errors)
+    else:
+        print("Form is invalid")
+        form = TransactionsForm()
 
+    context = {'form': form}
+    return render(request, 'transactions/transaction_form.html', context)
+
+
+
+def updateTransaction(request, pk):
+
+
+    transactions = Transactions.objects.get(id=pk)
+    # form = TransactionsForm(instance=transactions)
+
+    if request.method == 'POST':
+        # print("POST:", request.POST)
+        form = TransactionsForm(request.POST, instance=transactions)
+        if form.is_valid():
+            print("Form is Valid")
+            transactions = form.save(commit=False)
+            transactions.user = request.user
+            form.save()
+            return redirect('show-transactions')
+        else:
+            print("Form errors", form.errors)
+    else:
+        print("Form is invalid")
+        form = TransactionsForm(instance=transactions)
 
     context = {'form': form}
     return render(request, 'transactions/transaction_form.html', context)

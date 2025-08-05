@@ -1,7 +1,40 @@
+<!-- <!DOCTYPE html>
 <h1>Form</h1>
-<form action="" methods="POST">
+<form methods="POST" action="" onsubmit="console.log('Submitting')">
     {% csrf_token %}
     {{form}}
 
-    <input type="submit" name="Submit">
+    <button type="submit">Submit</button>
+</form> -->
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Test Form</title>
+</head>
+<body>
+    <h1>Form Test</h1>
+    <form method="POST" action="" onsubmit="event.preventDefault(); console.log('Submitting...')">
+        {% csrf_token %}
+        
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" id="amount"><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html> -->
+
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Submit</button>
+
+  {% if form.errors %}
+    <ul>
+      {% for field, errors in form.errors.items %}
+        <li>{{ field }}: {{ errors }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 </form>

@@ -26,6 +26,9 @@
                     <td>{{ obj.amount }}</td>
                     <td>{{ obj.category }}</td>
                     <td>
+                    <a href="{% url 'update_transaction' obj.id %}">Update</a>
+                    </td>
+                    <td>
                     <a href="{% url 'delete_transaction' obj.id %}">Delete</a>
                     </td>
                 </tr>

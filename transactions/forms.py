@@ -5,4 +5,4 @@ class TransactionsForm(ModelForm):
     class Meta:
         model = Transactions
         # fields = ['user','category']
-        fields = '__all__'
+        fields = ['transaction_type','transaction_timestamp','amount','category']
