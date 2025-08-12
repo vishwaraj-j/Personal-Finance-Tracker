@@ -1,0 +1,9 @@
+<p>Are you sure you want to delete{{transaction}}</p>
+
+<form action="{% url 'delete_transaction' transactions.id %}" method="POST">
+
+    {% csrf_token %}
+    <a href="{% url 'show-transactions' %}">Cancel</a>
+
+    <input type="submit" name="Confirm">
+</form>
